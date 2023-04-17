@@ -4,10 +4,13 @@ interface IArticle {
     body: string
 }
 type ArticleStateType = {
-    articles: IArticle[]
+    articles: IArticle[],
+    loading: boolean,
+    error?: string | unknown
 }
 type ArticleActionType = {
     type: string,
-    article: IArticle
+    article?: IArticle,
+    error?: string | unknown
 }
 type DispatchArticleType = (action: ArticleAction) => ArticleAction

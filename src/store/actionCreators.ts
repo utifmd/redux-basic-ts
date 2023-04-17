@@ -1,21 +1,49 @@
 import * as types from "./actionTypes"
 
 export function addArticle(article: IArticle): DispatchArticleType {
-    const action: ArticleActionType = {
-        article, type: types.ADD_ARTICLE
+    return async (dispatch: DispatchArticleType) => {
+        try {
+            const requestAction: ArticleActionType = {
+                type: types.ADD_ARTICLE_REQUEST
+            }
+            dispatch(requestAction)
+            const response = await httpClient(article)
+            const doneAction: ArticleActionType = {
+                type: types.ADD_ARTICLE_DONE, article: response
+            }
+            dispatch(doneAction)
+        } catch (error) {
+            const failedAction: ArticleActionType = {
+                type: types.ADD_ARTICLE_FAILED, error
+            }
+            dispatch(failedAction)
+        }
     }
-    return httpRequest(action)
 }
-export function removeArticle(article: IArticle): DispatchArticleType {
-    const action: ArticleActionType = {
-        article, type: types.REMOVE_ARTICLE
+export const removeArticle = (article: IArticle): DispatchArticleType =>
+    async (dispatch: DispatchArticleType) => {
+        try {
+            const requestAction: ArticleActionType = {
+                type: types.REMOVE_ARTICLE_REQUEST
+            }
+            dispatch(requestAction)
+            const response = await httpClient(article)
+            const doneAction: ArticleActionType = {
+                type: types.REMOVE_ARTICLE_DONE, article: response
+            }
+            dispatch(doneAction)
+        } catch (error) {
+            const failedAction: ArticleActionType = {
+                type: types.REMOVE_ARTICLE_FAILED, error
+            }
+            dispatch(failedAction)
+        }
     }
-    return httpRequest(action)
-}
-export function httpRequest(action: ArticleActionType) {
-    return (dispatch: DispatchArticleType) => {
+function httpClient<T>(params: T): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
         setTimeout(() => {
-            dispatch(action)
-        }, 500)
-    }
+            // reject({message: "Failed."})
+            resolve(params)
+        }, 3000)
+    })
 }
